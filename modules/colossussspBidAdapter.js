@@ -5,6 +5,11 @@ import { ajax } from '../src/ajax.js';
 import { config } from '../src/config.js';
 import { convertOrtbRequestToProprietaryNative } from '../src/native.js';
 
+/**
+ * @typedef {import('../src/adapters/bidderFactory.js').BidRequest} BidRequest
+ * @typedef {import('../src/adapters/bidderFactory.js').Bid} Bid
+ */
+
 const BIDDER_CODE = 'colossusssp';
 const G_URL = 'https://colossusssp.com/?c=o&m=multi';
 const G_URL_SYNC = 'https://sync.colossusssp.com';
@@ -135,7 +140,7 @@ export const spec = {
         groupId: bid.params.group_id,
         bidId: bid.bidId,
         tid: bid.ortb2Imp?.ext?.tid,
-        eids: [],
+        eids: bid.userIdAsEids || [],
         floor: {}
       };
 
@@ -168,7 +173,7 @@ export const spec = {
         placement.mimes = mediaTypes[VIDEO].mimes;
         placement.protocols = mediaTypes[VIDEO].protocols;
         placement.startdelay = mediaTypes[VIDEO].startdelay;
-        placement.placement = mediaTypes[VIDEO].placement;
+        placement.placement = mediaTypes[VIDEO].plcmt;
         placement.skip = mediaTypes[VIDEO].skip;
         placement.skipafter = mediaTypes[VIDEO].skipafter;
         placement.minbitrate = mediaTypes[VIDEO].minbitrate;

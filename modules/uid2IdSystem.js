@@ -16,6 +16,13 @@ import {MODULE_TYPE_UID} from '../src/activities/modules.js';
 import { Uid2GetId, Uid2CodeVersion, extractIdentityFromParams } from './uid2IdSystem_shared.js';
 import {UID2_EIDS} from '../libraries/uid2Eids/uid2Eids.js';
 
+/**
+ * @typedef {import('../modules/userId/index.js').Submodule} Submodule
+ * @typedef {import('../modules/userId/index.js').SubmoduleConfig} SubmoduleConfig
+ * @typedef {import('../modules/userId/index.js').ConsentData} ConsentData
+ * @typedef {import('../modules/userId/index.js').uid2Id} uid2Id
+ */
+
 const MODULE_NAME = 'uid2';
 const MODULE_REVISION = Uid2CodeVersion;
 const PREBID_VERSION = '$prebid.version$';
@@ -101,6 +108,10 @@ function decodeImpl(value) {
     _logInfo('Found server-only token. Refresh is unavailable for this token.');
     const result = { uid2: { id: value } };
     return result;
+  }
+  if (value.latestToken === 'optout') {
+    _logInfo('Found optout token.  Refresh is unavailable for this token.');
+    return { uid2: { optout: true } };
   }
   if (Date.now() < value.latestToken.identity_expires) {
     return { uid2: { id: value.latestToken.advertising_token } };
