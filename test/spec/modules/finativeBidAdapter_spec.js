@@ -86,7 +86,7 @@ describe('Finative adapter', function () {
         }
       }];
 
-      let assets = JSON.parse(spec.buildRequests(validBidRequests, { refererInfo: { referer: 'page' } }).data).imp[0].native.request.assets;
+      let assets = JSON.parse(JSON.parse(spec.buildRequests(validBidRequests, { refererInfo: { referer: 'page' } }).data).imp[0].native.request).assets;
 
       assert.equal(assets[0].id, 1);
       assert.equal(assets[1].id, 3);

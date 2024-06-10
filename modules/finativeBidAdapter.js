@@ -108,9 +108,7 @@ export const spec = {
         tid: tid,
         pt: pt,
         native: {
-          request: {
-            assets
-          }
+          request: JSON.stringify({assets})
         }
       };
     });
@@ -189,7 +187,19 @@ export const spec = {
 registerBidder(spec);
 
 function parseNative(bid) {
-  const {assets, link, imptrackers} = bid.adm.native;
+  let native;
+
+  if (typeof bid.adm === 'string') {
+    try {
+      native = JSON.parse(bid.adm).native;
+    } catch (e) {
+      return;
+    }
+  } else {
+    native = bid.adm.native;
+  }
+
+  const { assets, link, imptrackers } = native;
 
   let clickUrl = link.url.replace(/\$\{AUCTION_PRICE\}/g, bid.price);
 
